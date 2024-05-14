@@ -4,15 +4,15 @@ function prizeExtractor() {
     // Carica il conteggio dei premi assegnati oggi
     fetch('./data/prizes.json')
     .then(response => response.json())
-    .then(data => {
-        var prizesAwarded = data.prizes_awarded;
+    .then(prizesData => {
+        var prizesAwarded = prizesData.prizes_awarded;
 
         // Carica il numero premi deciso per la mensa ed il numero di sondaggi stimato
         fetch('./data/probability-data.json')
-            .then(response => response.json())
-            .then(data => {
-            var totalPrizes = data.total_prizes;
-            var expectedSurveys = data.expected_surveys;
+        .then(response => response.json())
+        .then(probabilityData => {
+            var totalPrizes = probabilityData.total_prizes;
+            var expectedSurveys = probabilityData.expected_surveys;
 
             // Ricava la probabilità di vincita a partire dai dati caricati nel file json
             var probability = totalPrizes / expectedSurveys;
@@ -20,24 +20,22 @@ function prizeExtractor() {
             // Controlla che ci siano ancora premi disponibili 
             // e poi genera un numero casuale tra 0 e 1 confrontandolo con la probabilità ricavata
             if (prizesAwarded < totalPrizes && Math.random() < probability) {
-                document.getElementById("result").innerText = "Congratulazioni! Hai vinto un caffè!";           
-                data.prizes_awarded++;   // incrementa la variabile dei premi assegnati
-                fetch('./data/prizes.json', {
-                    method: 'PUT',   // accede al file con il conteggio per aggiornarlo
+                document.getElementById("result").innerText = "Congratulazioni! Hai vinto un caffè!";
+
+                // Con la vincita chiama la action per incrementare la variabile dei premi assegnati 
+                fetch('https://api.github.com/repos/EnMa85/estrazione-premi/actions/workflows/prizes-update/dispatches', {
+                    method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer BEHAVIX_TOKEN'
-                    },
-                    body: JSON.stringify(data),
-                });
- 
+                        'Content-Type': 'application/json'
+                    }
+                })
             } else {
                 document.getElementById("result").innerText = "Non hai vinto. Ritenta la prossima volta!";
             }
         })
-        .catch(error => console.error('Errore nel caricamento dei dati:', error));
+        .catch(error => console.error('Errore nel caricamento dei dati per il calcolo della probabilità:', error));
     })
-    .catch(error => console.error('Errore nel caricamento dei dati:', error));
+    .catch(error => console.error('Errore nel caricamento dei dati del conteggio:', error));
 }
 
 // Aggiungi un event listener al bottone
