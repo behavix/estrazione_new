@@ -1,0 +1,27 @@
+name: Reset Prizes Daily
+
+# Resetta il conteggio dei premi ogni giorno alle 04:00
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+
+jobs:
+  reset:
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2 
+
+      - name: Reset prizes
+        run: |
+              echo '{"prizes_awarded": 0}' > ../prizes.json
+
+      - name: Commit Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add prizes.json
+          git commit -m "Reset prizes"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.BEHAVIX_TOKEN }}
