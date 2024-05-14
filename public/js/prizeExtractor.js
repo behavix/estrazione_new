@@ -2,13 +2,13 @@
 function prizeExtractor() {
 
     // Carica il conteggio dei premi assegnati oggi
-    fetch('./prizes.json')
+    fetch('./data/prizes.json')
     .then(response => response.json())
     .then(data => {
         var prizesAwarded = data.prizes_awarded;
 
         // Carica il numero premi deciso per la mensa ed il numero di sondaggi stimato
-        fetch('./data.json')
+        fetch('./data/probability-data.json')
             .then(response => response.json())
             .then(data => {
             var totalPrizes = data.total_prizes;
@@ -22,7 +22,7 @@ function prizeExtractor() {
             if (prizesAwarded < totalPrizes && Math.random() < probability) {
                 document.getElementById("result").innerText = "Congratulazioni! Hai vinto un caffè!";           
                 data.prizes_awarded++;   // incrementa la variabile dei premi assegnati
-                fetch('./prizes.json', {
+                fetch('./data/prizes.json', {
                     method: 'PUT',   // accede al file con il conteggio per aggiornarlo
                     headers: {
                         'Content-Type': 'application/json',

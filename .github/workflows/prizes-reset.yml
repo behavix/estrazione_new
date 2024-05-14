@@ -14,7 +14,7 @@ jobs:
 
       - name: Reset prizes
         run: |
-              echo '{"prizes_awarded": 0}' > ../prizes.json
+              echo '{"prizes_awarded": 0}' > ../data/prizes.json
 
       - name: Commit Changes
         run: |
