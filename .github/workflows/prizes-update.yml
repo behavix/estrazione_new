@@ -14,14 +14,14 @@ jobs:
 
       - name: Update prizes
         run: |
-          prizes_awarded=$(jq --raw-output '.prizes_awarded + 1' ../docs/data/prizes.json)
-          echo "{ \"prizes_awarded\": $prizes_awarded }" > ../docs/data/prizes.json
+          prizes_awarded=$(jq '.prizes_awarded + 1' ./data/prizes.json)
+          echo "{ \"prizes_awarded\": $prizes_awarded }" > ./data/prizes.json
 
       - name: Commit Changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add ../docs/data/prizes.json
+          git add prizes.json
           git commit -m "Update prizes"
           git push origin main
         env:
