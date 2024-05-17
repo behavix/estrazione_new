@@ -5,7 +5,8 @@ name: Reset Prizes Daily
 on:
   schedule:
     - cron: '0 4 * * *'
-
+  permissions:
+    contents: write
 jobs:
   reset:
     runs-on: ubuntu-latest
