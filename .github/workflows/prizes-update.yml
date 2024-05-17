@@ -4,24 +4,18 @@ on:
   push:
     branches:
       - main
-      
-permissions:
-    contents: write
-    
+
 jobs:
   update:   
     runs-on: ubuntu-latest
     steps:
-      - name: Install jq
-        run: sudo apt-get install -y jq
-        
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Update prizes
         run: |
           prizes_awarded=$(jq --raw-output '.prizes_awarded + 1' ./docs/data/prizes.json)
-          echo "{\"prizes_awarded\": $prizes_awarded}" > ./docs/data/prizes.json
+          echo "{ \"prizes_awarded\": $prizes_awarded }" > ./docs/data/prizes.json
 
       - name: Commit Changes
         run: |
