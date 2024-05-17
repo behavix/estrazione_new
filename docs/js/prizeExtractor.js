@@ -26,9 +26,15 @@ function prizeExtractor() {
                 fetch('https://api.github.com/repos/EnMa85/estrazione-premi/actions/workflows/prizes-update/dispatches', {
                     method: 'POST',
                     headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json',
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({
+                        ref: 'main'
+                    })
                 })
+                
             } else {
                 document.getElementById("result").innerText = "Non hai vinto. Ritenta la prossima volta!";
             }
