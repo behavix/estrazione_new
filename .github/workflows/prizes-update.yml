@@ -19,7 +19,7 @@ jobs:
       - name: Update prizes
         run: |
           prizes_awarded=$(jq --raw-output '.prizes_awarded + 1' ./docs/data/prizes.json)
-          echo "{ \"prizes_awarded\": $prizes_awarded }" > ./docs/data/prizes.json
+          echo "{\"prizes_awarded\": $prizes_awarded}" > ./docs/data/prizes.json
 
       - name: Commit Changes
         run: |
@@ -29,4 +29,4 @@ jobs:
           git commit -m "Update prizes"
           git push origin main
         env:
-          GITHUB_TOKEN: ${{ secrets.BEHAVIX_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
