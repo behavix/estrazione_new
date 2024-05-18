@@ -26,7 +26,7 @@ function prizeExtractor() {
                 fetch('https://api.github.com/repos/EnMa85/estrazione-premi/actions/workflows/prizes-update/dispatches', {
                     method: 'POST',
                     headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Authorization': `token ${secrets.GITHUB_TOKEN}`,
                         'Accept': 'application/vnd.github.v3+json',
                         'Content-Type': 'application/json'
                     },
