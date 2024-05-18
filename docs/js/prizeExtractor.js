@@ -34,7 +34,14 @@ function prizeExtractor() {
                         ref: 'main'
                     })
                 })
-                
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Workflow triggered successfully");
+                    } else {
+                        console.error('Error triggering workflow:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Errore nel chiamare la GitHub Action:', error));
             } else {
                 document.getElementById("result").innerText = "Non hai vinto. Ritenta la prossima volta!";
             }
