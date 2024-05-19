@@ -18,13 +18,13 @@ jobs:
 
       - name: Reset prizes
         run: |
-              echo '{"prizes_awarded": 0}' > ./data/prizes.json
+              echo '{"prizes_awarded": 0}' > ./data/prizes-counter.json
 
       - name: Commit Changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add ./docs/data/prizes.json
+          git add ./docs/data/prizes-counter.json
           git commit -m "Reset prizes"
           git push origin main
         env:

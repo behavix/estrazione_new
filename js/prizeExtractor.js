@@ -2,7 +2,7 @@
 function prizeExtractor() {
 
     // Carica il conteggio dei premi assegnati oggi
-    fetch('./data/prizes.json')
+    fetch('./data/prizes-counter.json')
     .then(response => response.json())
     .then(prizesData => {
         var prizesAwarded = prizesData.prizes_awarded;
@@ -31,7 +31,11 @@ function prizeExtractor() {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        ref: 'main'
+                        ref: 'main',
+                        inputs: {
+                            filename: 'prizes-counter.json',
+                            newContent: JSON.stringify({ prizes_awarded: prizesAwarded + 1 })
+                        }
                     })
                 })
                 .then(response => {
