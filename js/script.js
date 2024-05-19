@@ -1,5 +1,5 @@
 document.getElementById('prizeButton').addEventListener('click', () => {
-    fetch('/.netlify/functions/prizeExtractor.js')
+    fetch('/netlify/functions/prizeExtractor.js')
         .then(response => response.json())
         .then(data => {
             // Visualizza il messaggio di vincita o di non vincita
