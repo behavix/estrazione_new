@@ -1,11 +1,11 @@
-import Airtable from 'airtable';
-import fs from 'fs/promises';
-import path from 'path';
+const Airtable = require('airtable');
+const fs = require('fs').promises;
+const path = require('path');
 
 // Configurazione di Airtable
 const base = new Airtable({ apiKey: process.env.AIRTABLE_TOKEN }).base('app8M2ssxYlm1xDJu');
 
-export async function handler(event, context) {
+module.exports.handler = async function(event, context) {
     try {
         // Ricava i dati dal file di configurazione
         const configPath = path.resolve(__dirname, 'config', 'configPrizes.json');
@@ -26,7 +26,7 @@ export async function handler(event, context) {
         let currentRecord;
         let recordId;
         let prizesLeft;
-
+  
         if (records.length === 0) {
             // Se non esiste un record per oggi, creane uno nuovo
             currentRecord = await base('PrizeCounter').create({
