@@ -1,14 +1,14 @@
 // Import the airtableConn function
-const connAirtable = require('./utils/connAirtable');
+const connAirtable = require('../utils/connAirtable');
 // Import the readConfig function
-const readConfig = require('./utils/readConfig');
+const readConfig = require('../utils/readConfig');
 // Import the logError function
-const logError = require('./utils/logError');
+const logError = require('../utils/logError');
 
 module.exports.handler = async function(event, context) {
     try {
         // Read config file
-        const config = await readConfig('./config/config.json');
+        const config = await readConfig('../config/config.json');
 
         // Airtable connection
         const airtableBase = await connAirtable(config.airtableBase); 
