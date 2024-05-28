@@ -8,7 +8,7 @@ async function readConfig(configFileName) {
         const configData = await fs.readFile(configPath, 'utf-8');
         return JSON.parse(configData);
     } catch (error) {
-        console.error("Error reading config file:", error);
+        console.error("Errore nella lettura del file config:", error);
         throw error;
     }
 }

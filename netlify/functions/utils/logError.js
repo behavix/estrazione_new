@@ -15,7 +15,7 @@ async function logError(error) {
             details: JSON.stringify(error, Object.getOwnPropertyNames(error))
         });
     } catch (logError) {
-        console.error('Failed to log error to Airtable:', logError);
+        console.error('Errore durante connessione ad Airtable:', logError);
     }
 }
 
