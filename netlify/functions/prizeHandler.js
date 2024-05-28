@@ -8,7 +8,7 @@ const logError = require('./utils/logError');
 module.exports.handler = async function(event, context) {
     try {
         // Read config file
-        const config = await readConfig('../config/config.json');
+        const config = await readConfig('./config/config.json');
 
         // Airtable connection
         const airtableBase = await connAirtable(config.airtableBase); 
@@ -26,7 +26,7 @@ module.exports.handler = async function(event, context) {
 
         // Log error to Airtable
         await logError(error);
-        
+
         return {
             statusCode: 500,
             body: JSON.stringify({ message: 'Si è verificato un errore.' }),

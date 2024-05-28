@@ -1,13 +1,13 @@
 // Import the airtableConn function
-const connAirtable = require('./utils/connAirtable');
+const connAirtable = require('connAirtable');
 // Import the readConfig function
-const readConfig = require('./utils/readConfig');
+const readConfig = require('readConfig');
 
 // Helper function to log errors in Airtable
 async function logError(error) {
     try {
         // Read config file again if necessary, or pass config as a parameter
-        const config = await readConfig('../config/config.json');
+        const config = await readConfig('./config/config.json');
         const airtableBase = await connAirtable(config.airtableBase);
 
         await airtableBase(config.errorTable).create({
