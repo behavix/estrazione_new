@@ -8,7 +8,7 @@ const logError = require('./utils/logError');
 module.exports.handler = async function(event, context) {
     try {
         // Read config file
-        const config = await readConfig('./config/config.json');
+        const config = await readConfig('./netlify/functions/config/config.json');
 
         // Airtable connection
         const airtableBase = await connAirtable(config.airtableBase); 
