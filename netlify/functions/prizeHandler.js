@@ -9,7 +9,7 @@ module.exports.handler = async function(event, context) {
     try {
         // Read config file
         console.log('Reading configuration...');
-        const config = await readConfig('./netlify/functions/config/config.json');
+        const config = await readConfig('netlify/functions/config/config.json');
         console.log('Configuration read:', config);
 
         // Airtable connection
