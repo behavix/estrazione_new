@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "airtable": "^0.12.2"
+  },
+  "scripts": {
+    "build": "cp -R netlify/functions/config public/config"
   }
 }

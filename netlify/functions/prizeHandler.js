@@ -5,11 +5,19 @@ const readConfig = require('./utils/readConfig');
 // Import the logError function
 const logError = require('./utils/logError');
 
+const fs = require('fs').promises;
+const path = require('path');
+
 module.exports.handler = async function(event, context) {
     try {
+         // List files in the config directory
+        const configDirPath = path.resolve(__dirname, './config');
+        const files = await fs.readdir(configDirPath);
+        console.log('Files in config directory:', files);
+
         // Read config file
         console.log('Reading configuration...');
-        const config = await readConfig('netlify/functions/config/config.json');
+        const config = await readConfig('./config/config.json');
         console.log('Configuration read:', config);
 
         // Airtable connection
