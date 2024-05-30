@@ -23,7 +23,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin: 15% auto;
     position: relative;
 }
 header {
@@ -41,8 +40,8 @@ header img {
 }
 main {
     flex: 1;
-    margin: 5% auto 10%;
-    font-size: 1.9rem;
+    margin: 25% auto;
+    font-size: 1.7rem;
 }
 button {
     width: fit-content;
