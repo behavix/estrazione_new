@@ -94,7 +94,7 @@ async function prizeExtractor(airtableBase, config, currentRecord) {
         } else {
             return {
                 statusCode: 200,
-                body: JSON.stringify({ message: 'Questa volta non hai vinto. Riprova domani!' }),
+                body: JSON.stringify({ message: 'Questa volta non hai vinto.\n\nRiprova domani!' }),
             };
         }
     } catch (error) {

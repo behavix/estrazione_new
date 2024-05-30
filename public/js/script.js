@@ -7,7 +7,10 @@ document.getElementById('prizeButton').addEventListener('click', () => {
             return response.json();
         })
         .then(data => {
-            // Visualizza il messaggio di vincita o di non vincita
+            // Nascondi il pulsante e visualizza il messaggio di vincita o di non vincita
+            document.getElementById('wheel').style.display = 'none';
+            document.getElementById('wheel').style.height = 0;
+            document.getElementById("result").style.display = 'block';
             document.getElementById("result").innerText = data.message;
         })
         .catch(error => {
