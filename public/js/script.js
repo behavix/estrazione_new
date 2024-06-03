@@ -3,9 +3,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const validParam = urlParams.get('valid');
 
-    // Controlla se l'utente ha già partecipato all'estrazione
+    // Controlla se l'utente ha già partecipato all'estrazione e tieni conto del tempo trascorso
     const resultMessage = localStorage.getItem('resultMessage');
+    const timeMessage = localStorage.getItem('timeMessage');
 
+    // Se è presente un risultato e sono passate più di 8 ore, cancellalo
+    const eightHoursInMilliseconds = 8 * 60 * 60 * 1000;
+    if (resultMessage && timeMessage) {
+        const lastTime = parseInt(timeMessage);
+        const elapsedTime = Date.now() - lastTime;
+        if (elapsedTime >= eightHoursInMilliseconds) {
+            localStorage.removeItem('resultMessage');
+            localStorage.removeItem('timeMessage');
+        }
+    }
+
+    // Se il risultato non è stato cancellato
     if (resultMessage) {
         // Visualizza il messaggio di risultato memorizzato
         document.getElementById('wheel').style.display = 'none';
@@ -13,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById("result").style.display = 'block';
         document.getElementById("result").innerText = resultMessage;
 
+    // Se l'utente accede direttamente e non tramite questionario
     } else if (!referrer || !validParam || validParam !== 'true') {
         // Visualizza il messaggio di questionario non compilato
         document.getElementById('thanks').style.display = 'none';
@@ -39,6 +53,7 @@ document.getElementById('prizeButton').addEventListener('click', () => {
     .then(data => {
         // Memorizza il messaggio di risultato nel localStorage
         localStorage.setItem('resultMessage', data.message);
+        localStorage.setItem('timeMessage', Date.now());
 
         // Nascondi il pulsante e visualizza il messaggio di vincita o di non vincita
         document.getElementById('wheel').style.display = 'none';
