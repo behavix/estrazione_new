@@ -28,8 +28,8 @@ body {
 header {
     width: 90%;
     height: 7vh;
-    padding: 1%;
-    margin: 2% auto;
+    padding: 0.6%;
+    margin: auto;
     border-radius: 50px;
     background-color: var(--orange);
 }
@@ -40,7 +40,8 @@ header img {
 }
 main {
     flex: 1;
-    margin: 30% auto;
+    width: 100%;
+    margin: 10% auto;
     font-size: 1.7rem;
 }
 button {
