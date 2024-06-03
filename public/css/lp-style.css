@@ -40,8 +40,10 @@ header img {
 }
 main {
     flex: 1;
-    width: 100%;
+    box-sizing: border-box;
+    width: 90%;
     margin: 10% auto;
+    padding: 5%;
     font-size: 1.7rem;
 }
 button {
@@ -58,9 +60,10 @@ button {
     display: none;
 }
 #wheel, #result {
+    box-sizing: border-box;
     position: absolute;
-    top: 50%;
-    width: 100%;
+    top: 40%;
+    width: 90%;
 }
 footer {
     position: fixed;
