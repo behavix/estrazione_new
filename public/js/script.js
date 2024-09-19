@@ -66,8 +66,8 @@ document.getElementById('prizeButton').addEventListener('click', () => {
         document.getElementById("result").innerText = data.message;
 
         // Prevent the page from reloading
-        // (per test) const landingPageURL = window.location.origin + '/landing-page.html';
-        history.pushState({}, document.title, window.location.origin);
+        const landingPageURL = window.location.origin + '/index.html';
+        history.pushState({}, document.title, landingPageURL);
     })
     .catch(error => {
         console.error('Errore:', error);
