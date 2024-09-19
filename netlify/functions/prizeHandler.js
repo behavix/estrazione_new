@@ -5,6 +5,7 @@ const readConfig = require('./utils/readConfig');
 // Import the logError function
 const logError = require('./utils/logError');
 
+//test commit
 module.exports.handler = async function(event, context) {
     try {
         // Read config file
