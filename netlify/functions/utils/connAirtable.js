@@ -1,9 +1,9 @@
 const Airtable = require('airtable');
 
-// Funzione per connettersi ad Airtable, riceve come parametro l'id della base
+// Function to connect to Airtable, receives the base ID as a parameter
 async function connAirtable(airtableBase) {
     try {
-        // Inizializza la connessione ad Airtable utilizzando le credenziali nella variabile d'ambiente
+        // Initialize the connection to Airtable using the credentials saved in the environment variable
         const base = new Airtable({ apiKey: process.env.AIRTABLE_TOKEN }).base(airtableBase);
         return base;
     } catch (error) {

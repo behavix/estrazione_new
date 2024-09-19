@@ -3,12 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const validParam = urlParams.get('valid');
 
-    // Controlla se l'utente ha già partecipato all'estrazione e tieni conto del tempo trascorso
+    // Check if the user has already played and when
     const resultMessage = localStorage.getItem('resultMessage');
     const timeMessage = localStorage.getItem('timeMessage');
 
-    // Se è presente un risultato e sono passate più di 8 ore, cancellalo
-    const eightHoursInMilliseconds = 8 * 60 * 60 * 1000;
+    // If the user played more than 4 hours ago, reset the result
+    const eightHoursInMilliseconds = 4 * 60 * 60 * 1000;
     if (resultMessage && timeMessage) {
         const lastTime = parseInt(timeMessage);
         const elapsedTime = Date.now() - lastTime;
@@ -18,17 +18,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Se il risultato non è stato cancellato
+    // If the user has already played in this session,
     if (resultMessage) {
-        // Visualizza il messaggio di risultato memorizzato
+        // then display the last result
         document.getElementById('wheel').style.display = 'none';
         document.getElementById('wheel').style.height = 0;
         document.getElementById("result").style.display = 'block';
         document.getElementById("result").innerText = resultMessage;
 
-    // Se l'utente accede direttamente e non tramite questionario
+    // If the user visits the draw page directly,
     } else if (!referrer || !validParam || validParam !== 'true') {
-        // Visualizza il messaggio di questionario non compilato
+        // then notify that they need to complete the questionnaire
         document.getElementById('thanks').style.display = 'none';
         document.getElementById('thanks').style.height = 0;
         document.getElementById('wheel').style.display = 'none';
@@ -37,11 +37,12 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById("result").innerText = 'Devi compilare il questionario per partecipare all\'estrazione!';
     }
 
-    // Rimuovi il parametro URL
+    // Keep the page unchanged in case of reload
     history.replaceState({}, document.title, window.location.pathname);
 });
 
 
+// Call the function to participate in the draw
 document.getElementById('prizeButton').addEventListener('click', () => {
     fetch('/.netlify/functions/prizeHandler')
         .then(response => {
@@ -51,17 +52,17 @@ document.getElementById('prizeButton').addEventListener('click', () => {
             return response.json();
     })
     .then(data => {
-        // Memorizza il messaggio di risultato nel localStorage
+        // Store the result message in localStorage
         localStorage.setItem('resultMessage', data.message);
         localStorage.setItem('timeMessage', Date.now());
 
-        // Nascondi il pulsante e visualizza il messaggio di vincita o di non vincita
+        // Hide the button and display the result message
         document.getElementById('wheel').style.display = 'none';
         document.getElementById('wheel').style.height = 0;
         document.getElementById("result").style.display = 'block';
         document.getElementById("result").innerText = data.message;
 
-        // Sostituisci l'URL nella cronologia del browser con l'URL della landing page
+        // Prevent the page from reloading
         const landingPageURL = window.location.origin + '/landing-page.html';
         history.pushState({}, document.title, landingPageURL);
     })

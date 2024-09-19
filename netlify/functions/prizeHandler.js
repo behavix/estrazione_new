@@ -5,7 +5,6 @@ const readConfig = require('./utils/readConfig');
 // Import the logError function
 const logError = require('./utils/logError');
 
-//test commit
 module.exports.handler = async function(event, context) {
     try {
         // Read config file
@@ -50,16 +49,16 @@ async function currentRecordFinder(airtableBase, config) {
         const now = new Date();
         const today = now.toISOString().split('T')[0];
 
-        // Verifica se l'ultimo record è quello di oggi, altrimenti creane uno nuovo
+        // Check if the last record is today's, otherwise create a new one
         if (lastRecord.length === 0 || lastRecord[0].fields.date !== today) {
-            // Se la tabella è vuota o non ha ancora un record per oggi, crea un nuovo record
+            // If the table is empty or doesn't have a record for today yet, create a new record
             return await airtableBase(config.countTable).create({
                 date: today,
                 prizesLeft: config.totalPrizes,
                 totalPrizes: config.totalPrizes
             });
         } else {
-            // Altrimenti usa quello già esistente
+            // Otherwise, use the existing one
             return lastRecord[0];
         }
     } catch (error) {
@@ -75,16 +74,17 @@ async function currentRecordFinder(airtableBase, config) {
 // Helper function to process prize drawing
 async function prizeExtractor(airtableBase, config, currentRecord) {
     try {
-        // Ricava dati del record corrente
+        // Obtain data from the current record
         let recordId = currentRecord.id;
         let prizesLeft = currentRecord.fields.prizesLeft;
 
-        // Ricava la probabilità di vincita a partire dai dati caricati nel file json
+        // Obtain the winning probability from the data loaded in the JSON file
         const probability = config.totalPrizes / config.expectedSurveys;
-        // Salva il risultato casuale in una variabile booleana, sarà vera se rientra nella probabilità ricavata
+        // Generate a random number, check if it falls within the probability
+        // and save the result in a boolean variable
         const winner = Math.random() < probability;
 
-        // Controlla se ci sono premi rimanenti e se il numero ottenuto è vincente
+        // Check if there are still prizes and if the obtained value is winning
         if (prizesLeft > 0 && winner) {
             prizesLeft--;
             await airtableBase(config.countTable).update(recordId, { prizesLeft });
