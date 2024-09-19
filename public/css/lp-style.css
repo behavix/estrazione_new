@@ -65,6 +65,9 @@ button {
     top: 40%;
     width: 90%;
 }
+#waitMsg {
+    display: none;
+}
 footer {
     position: fixed;
     bottom: 0;

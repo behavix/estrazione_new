@@ -44,6 +44,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Call the function to participate in the draw
 document.getElementById('prizeButton').addEventListener('click', () => {
+    document.getElementById('prizeButton').style.opacity = 0.3;
+    document.getElementById('playMsg').style.display = 'none';
+    document.getElementById('waitMsg').style.display = 'block';
     fetch('/.netlify/functions/prizeHandler')
         .then(response => {
             if (!response.ok) {
@@ -63,8 +66,8 @@ document.getElementById('prizeButton').addEventListener('click', () => {
         document.getElementById("result").innerText = data.message;
 
         // Prevent the page from reloading
-        const landingPageURL = window.location.origin + '/landing-page.html';
-        history.pushState({}, document.title, landingPageURL);
+        // (per test) const landingPageURL = window.location.origin + '/landing-page.html';
+        history.pushState({}, document.title, window.location.origin);
     })
     .catch(error => {
         console.error('Errore:', error);
