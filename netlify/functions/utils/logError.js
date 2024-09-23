@@ -3,10 +3,11 @@ const connAirtable = require('./connAirtable');
 // Import the readConfig function
 const readConfig = require('./readConfig');
 
+
 // Helper function to log errors in Airtable
 async function logError(error) {
     try {
-        // Read config file again if necessary, or pass config as a parameter
+        // Read config file and connect to airtable
         const config = await readConfig('../config/config.json');
         const airtableBase = await connAirtable(config.airtableBase);
 

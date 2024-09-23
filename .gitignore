@@ -3,3 +3,4 @@ temp.html
 .netlify
 package-lock.json
 node_modules/
+.env

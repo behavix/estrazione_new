@@ -1,7 +1,8 @@
 {
-  "totalPrizes": 10,
-  "expectedSurveys": 10,
+  "totalPrizes": 20,
+  "expectedSurveys": 40,
   "airtableBase": "app8M2ssxYlm1xDJu",
   "countTable": "PrizeCounter",
-  "errorTable": "ErrorLogs"
+  "errorTable": "ErrorLogs",
+  "checkTable": "Status_PrizeCounter"
 }
