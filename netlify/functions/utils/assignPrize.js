@@ -28,6 +28,11 @@ async function assignPrize(airtableBase, config, currentRecord) {
             const expirationMinutes = 15;
             // Set expiration of the prize
             now.setMinutes(now.getMinutes() + expirationMinutes);
+            // Format the expiration time in Rome timezone
+            const options = { timeZone: 'Europe/Rome', hour12: false };
+            const formatter = new Intl.DateTimeFormat('it-IT', options);
+            formatter.format(now);
+            // Create the final expiration string
             const hours = now.getHours();
             const minutes = now.getMinutes();
             const expiration = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
@@ -36,7 +41,7 @@ async function assignPrize(airtableBase, config, currentRecord) {
                 statusCode: 200,
                 winning: true,
                 message: 'Complimenti!\n\nHai vinto il caffè n.' + prizeNumber + ' del ' + today
-                        + '.\n\nRitiralo entro le ' + expiration + '.',
+                        + '.\n\nRitiralo entro le ore ' + expiration + '.',
             };
         } else {
             return {

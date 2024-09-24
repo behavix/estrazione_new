@@ -1,6 +1,6 @@
 // Import the functions
-const connAirtable = require('./utils/connAirtable');
 const readConfig = require('./utils/readConfig');
+const connAirtable = require('./utils/connAirtable');
 const logError = require('./utils/logError');
 const extractor = require('./utils/extractor');
 const assignPrize = require('./utils/assignPrize');

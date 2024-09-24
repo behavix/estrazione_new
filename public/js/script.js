@@ -1,10 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     const referrer = document.referrer;
     const urlParams = new URLSearchParams(window.location.search);
-    const validParam = urlParams.get('valid');
-    
-    
-    // !!! **** INSERIRE ?valid=true NELL'INDIRIZZO DI ORIGINE **** !!!
+    const validParam = urlParams.get('valid');  
+
+    /*
+    if (!checkLocalStorage()){
+        document.getElementById('playMsg').innerText = 'Il tuo browser non è '
+        + 'abilitato al salvataggio dei dati o ti trovi su una scheda in incognito.'
+        + '\n\nIl sito potrebbe non funzionare correttamente.';
+    }
+    */
 
     // Check if the user has already played and when
     const resultMessage = localStorage.getItem('resultMessage');
@@ -28,8 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('wheel').style.height = 0;
         document.getElementById("result").style.display = 'block';
         document.getElementById("result").innerText = resultMessage;
-    }
-/* !!! **** TEMPORARILY DISABLE **** !!!
+
     // If the user visits the draw page directly,
     } else if (!referrer || !validParam || validParam !== 'true') {
         // then notify that they need to complete the questionnaire
@@ -43,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Keep the page unchanged in case of reload
     history.replaceState({}, document.title, window.location.pathname);
-    */
 });
 
 // Call the function to participate in the draw
@@ -59,9 +62,8 @@ document.getElementById('prizeButton').addEventListener('click', () => {
             return response.json();
     })
     .then(data => {
-        // Store the result message in localStorage
-        localStorage.setItem('resultMessage', data.message);
-        localStorage.setItem('timeMessage', Date.now());
+
+        //let message = data.message;
 
         // Hide the button and display the result message
         document.getElementById('wheel').style.display = 'none';
@@ -78,3 +80,15 @@ document.getElementById('prizeButton').addEventListener('click', () => {
         document.getElementById("result").innerText = 'Si è verificato un errore. Riprova più tardi.';
     });
 });
+
+
+// Local storage test
+function checkLocalStorage() {
+    try {
+        localStorage.setItem('test', 'test');
+        localStorage.removeItem('test');
+       return true;
+    } catch (e) {
+        return false;
+    }
+}
