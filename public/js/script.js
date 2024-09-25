@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 */
     // Keep the page unchanged in case of reload
-    history.replaceState({}, document.title, window.location.pathname);
+  //  history.replaceState({}, document.title, window.location.pathname);
 });
 
 // Call the function to participate in the draw
@@ -83,8 +83,8 @@ document.getElementById('prizeButton').addEventListener('click', () => {
         document.getElementById("result").innerText = message;
 
         // Prevent the page from reloading
-        const landingPageURL = window.location.origin + '/index.html';
-        history.pushState({}, document.title, landingPageURL);
+        const landingPageURL = window.location.origin + '/';
+        history.pushState({}, document.title, window.location.origin);
     })
     .catch(error => {
         console.error('Errore:', error);

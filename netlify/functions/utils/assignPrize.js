@@ -17,24 +17,18 @@ async function assignPrize(airtableBase, config, currentRecord) {
             await airtableBase(config.countTable).update(recordId, { prizesLeft });
             
             // Get the current time
+            const options = { timeZone: 'Europe/Rome', year: 'numeric', month: '2-digit', day: '2-digit' };
             const now = new Date();
+
             // Extract the details of the day
-            const day = String(now.getDate()).padStart(2, '0');
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const year = now.getFullYear();
-            const today = `${day}/${month}/${year}`;
+            const today = now.toLocaleDateString('it-IT', options);
+
             // Get the details of the prize
             const prizeNumber = totalPrizes - prizesLeft;
-            // Set expiration of the prize
-            now.setMinutes(now.getMinutes() + config.expirationMinutes);
-            // Format the expiration time in Rome timezone
-            const options = { timeZone: 'Europe/Rome', hour12: false };
-            const formatter = new Intl.DateTimeFormat('it-IT', options);
-            formatter.format(now);
-            // Create the final expiration string
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const expiration = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+
+            // Calculates expiration
+            now.setMinutes(now.getMinutes() + 15);
+            const expiration = now.toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' });
 
             return {
                 statusCode: 200,
