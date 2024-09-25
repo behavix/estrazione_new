@@ -16,28 +16,26 @@ async function lockTable(airtableBase, config, checkRecord) {
             // Check the status of the table
             isLocked =  checkRecord.fields['Lock'] || false;
 
-            // If it's unlocked, lock it
-            if (!isLocked){
+            // Check if has timed out to force the unlock
+            const timeout = 10 * 1000;  // milliseconds
+            let lockTimestamp = new Date(checkRecord.fields['Timestamp']).getTime();
+                
+            let currentTime = Date.now();
+            let hasTimedOut = currentTime - lockTimestamp > timeout;
+
+            // If it's unlocked or has timed out, lock it
+            if (!isLocked || hasTimedOut){
                 try {
                     await airtableBase(config.checkTable).update(checkRecord.id, {
                         Lock: true,
                         Timestamp: new Date().toISOString(),
                     });
                     success = true;
+
                 } catch (error) {
                     console.error('Errore durante l\'aggiornamento del check record:', error.message);
                     await logError(error);
                     success = false;
-                }
-
-            // If it's locked check if has timed out to force the unlock
-            } else {
-                const timeout = 10 * 1000;  // milliseconds
-                let lockTimestamp = new Date(checkRecord.fields['Timestamp']).getTime();
-                let currentTime = Date.now();
-                let hasTimedOut = currentTime - lockTimestamp > timeout;
-                if (hasTimedOut) {
-                    success = true;
                 }
             }
 

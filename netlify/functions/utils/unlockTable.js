@@ -12,7 +12,6 @@ async function unlockTable(airtableBase, config, checkRecord) {
 				Lock: false,
 				Timestamp: new Date().toISOString(),
 			 });
-			console.log("Tabella sbloccata con successo.");
 			return {
 				statusCode: 200,
 			  };

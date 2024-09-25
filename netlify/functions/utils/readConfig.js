@@ -5,7 +5,6 @@ const path = require('path');
 async function readConfig(configFileName) {
     try {
         const configPath = path.resolve(__dirname, configFileName);
-        console.log("Attempting to read config file from:", configPath);
         const configData = await fs.readFile(configPath, 'utf-8');
         return JSON.parse(configData);
     } catch (error) {
