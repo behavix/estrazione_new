@@ -9,7 +9,7 @@ const checkTodayRecord = require('./utils/checkTodayRecord');
 const lockTable = require('./utils/lockTable');
 const unlockTable = require('./utils/unlockTable');
 
-module.exports.handler = async function () {
+module.exports.handler = async function() {
 
     try {   
         // Read config file
@@ -23,16 +23,11 @@ module.exports.handler = async function () {
 
         // Process prize drawing
         const prize = await extractor(config);
-        let message;
         const nonWinningMessage = 'Questa volta non hai vinto.\n\nRiprova domani!';
-
-
-        // Check if won or not
-        if (!prize) {
-            message = nonWinningMessage;
+        let message = nonWinningMessage;
 
         // If won, login to the database
-        } else {
+        if (prize) {
             try {
                 // Try to lock the main table to prevent multiple accesses
                 const maxRetries = 10;
@@ -44,7 +39,6 @@ module.exports.handler = async function () {
 
                     if (!success) {
                         attempts++;
-                        console.log('La tabella è bloccata. Tentativo ' + attempts);
                         await new Promise(resolve => setTimeout(resolve, timePerAttempt));
                     }
                 } while (!success && attempts < maxRetries);
@@ -52,7 +46,6 @@ module.exports.handler = async function () {
                 
                 // If the table is still locked, stop and notify to the user
                 if (!success) {
-                    console.log('La tabella è ancora bloccata dopo diversi tentativi.');
                     await logError('table not unlocked after several attempts');
                     message = nonWinningMessage;
 
@@ -65,18 +58,8 @@ module.exports.handler = async function () {
                     // Check if there's still a prize and save the related message
                     const assignedPrize = await assignPrize(airtableBase, config, todayRecord)
 
-                    if (assignedPrize.winning){
-                        message = assignedPrize.message;
-                    } else {
-                        message = nonWinningMessage;
-                    }
+                    message = assignedPrize.winning ? assignedPrize.message : nonWinningMessage;
                 }
-        
-                // Return the winning/non winning message
-                return {
-                    statusCode: 200,
-                    body: JSON.stringify({ message: message }),
-                };
 
             } catch (error) {
                 console.error('Errore:', error);
@@ -89,8 +72,14 @@ module.exports.handler = async function () {
             } finally {
                 // At the end of the process unlock the table
                 await unlockTable(airtableBase, config, checkRecord);
-            }
+            }    
         }
+
+        // Return the winning/non winning message
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ message: message }),
+        };
 
     } catch (error) {
         console.error('Errore:', error);
@@ -102,6 +91,4 @@ module.exports.handler = async function () {
         };
     }  
 }
-
-
 

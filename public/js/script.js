@@ -4,33 +4,42 @@ document.addEventListener('DOMContentLoaded', function() {
     const validParam = urlParams.get('valid');  
  
     let resultMessage = false;
+    let timeMessage = false;
+    /*
     if (!checkLocalStorage()){
         document.getElementById('playMsg').innerText = 'Il tuo browser non è '
         + 'abilitato al salvataggio dei dati o ti trovi su una scheda in incognito.'
         + '\n\nIl sito potrebbe non funzionare correttamente.';
+    }
+*/
+    //if (checkLocalStorage()){
 
-    } else {
-        // Check if the user has already played and when
-        resultMessage = localStorage.getItem('resultMessage');
-        const timeMessage = localStorage.getItem('timeMessage');
+    // Check if the user has already played and when
+    resultMessage = localStorage.getItem('resultMessage');
+    timeMessage = localStorage.getItem('timeMessage');
 
-        if (resultMessage || timeMessage) {
-            const lastTime = parseInt(timeMessage);
-            const elapsedTime = Date.now() - lastTime;
+    if (resultMessage || timeMessage) {
+        const lastTime = parseInt(timeMessage);
+        const elapsedTime = Date.now() - lastTime;
 
-            const timeoutResult = 15 * 60 * 1000; // milliseconds
-            const timeoutMessage =  3 * 60 * 60 * 1000
+        const timeoutResult = 1 * 60 * 1000; // milliseconds
+        const timeoutMessage =  2 * 60 * 1000
 
-            // If the user played more than 4 hours ago, reset the message
-            if (elapsedTime >= timeoutMessage) {
-                localStorage.removeItem('resultMessage');
-                localStorage.removeItem('timeMessage');
-            // If the user played more than 15 minutes, change the message
-            } else if (elapsedTime >= timeoutResult) {
-                localStorage.setItem('resultMessage', "Hai già partecipato all'estrazione");
-            }
+        // If the user played more than 4 hours ago, reset the message
+        if (elapsedTime >= timeoutMessage) {
+            localStorage.removeItem('resultMessage');
+            localStorage.removeItem('timeMessage');
+            resultMessage = false;
+            timeMessage = false;
+            
+        // If the user played more than 15 minutes, change the message
+        } else if (elapsedTime >= timeoutResult) {
+            resultMessage = 'Hai già partecipato all\'estrazione.';
+            localStorage.setItem('resultMessage', resultMessage);
         }
     }
+
+    //}
 
     // If the user has already played in this session,
     if (resultMessage) {
@@ -39,8 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('wheel').style.height = 0;
         document.getElementById("result").style.display = 'block';
         document.getElementById("result").innerText = resultMessage;
-    }
-/*
+        
     // If the user visits the draw page directly,
     } else if (!referrer || !validParam || validParam !== 'true') {
         // then notify that they need to complete the questionnaire
@@ -51,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById("result").style.display = 'block';
         document.getElementById("result").innerText = 'Devi compilare il questionario per partecipare all\'estrazione!';
     }
-*/
+
     // Keep the page unchanged in case of reload
   //  history.replaceState({}, document.title, window.location.pathname);
 });
@@ -64,6 +72,7 @@ document.getElementById('prizeButton').addEventListener('click', () => {
     fetch('/.netlify/functions/prizeHandler')
         .then(response => {
             if (!response.ok) {
+                document.getElementById("result").innerText = 'Si è verificato un errore. Riprova più tardi.';
                 throw new Error('Il network non risponde, riprova.', response.statusText);
             }
             return response.json();
@@ -83,8 +92,8 @@ document.getElementById('prizeButton').addEventListener('click', () => {
         document.getElementById("result").innerText = message;
 
         // Prevent the page from reloading
-        const landingPageURL = window.location.origin + '/';
-        history.pushState({}, document.title, window.location.origin);
+        //const landingPageURL = window.location.origin + '/';
+        //history.pushState({}, document.title, window.location.origin);
     })
     .catch(error => {
         console.error('Errore:', error);
@@ -98,7 +107,10 @@ function checkLocalStorage() {
     try {
         localStorage.setItem('test', 'test');
         localStorage.removeItem('test');
-       return true;
+
+        const test = localStorage.getItem('test');
+        const storage = test ? true : false;
+        return storage;
     } catch (e) {
         return false;
     }
