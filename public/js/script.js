@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('wheel').style.height = 0;
         document.getElementById("result").style.display = 'block';
         document.getElementById("result").innerText = resultMessage;
-        
+
     // If the user visits the draw page directly,
     } else if (!referrer || !validParam || validParam !== 'true') {
         // then notify that they need to complete the questionnaire
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Keep the page unchanged in case of reload
-  //  history.replaceState({}, document.title, window.location.pathname);
+    history.replaceState({}, document.title, window.location.pathname);
 });
 
 // Call the function to participate in the draw
@@ -92,8 +92,7 @@ document.getElementById('prizeButton').addEventListener('click', () => {
         document.getElementById("result").innerText = message;
 
         // Prevent the page from reloading
-        //const landingPageURL = window.location.origin + '/';
-        //history.pushState({}, document.title, window.location.origin);
+        history.pushState({}, document.title, window.location.origin);
     })
     .catch(error => {
         console.error('Errore:', error);
