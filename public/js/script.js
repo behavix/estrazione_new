@@ -6,41 +6,45 @@ document.addEventListener('DOMContentLoaded', function() {
  
     let resultMessage = false;
     let timeMessage = false;
-/*
+
+    /*
     if (!checkLocalStorage()){
         document.getElementById('playMsg').innerText = 'Il tuo browser non è '
         + 'abilitato al salvataggio dei dati o ti trovi su una scheda in incognito.'
         + '\n\nIl sito potrebbe non funzionare correttamente.';
     }
-*/
-    //if (checkLocalStorage()){
+    */
 
-    // Check if the user has already played and when
-    resultMessage = localStorage.getItem('resultMessage');
-    timeMessage = localStorage.getItem('timeMessage');
+    try {
+        // Check if the user has already played and when
+        resultMessage = localStorage.getItem('resultMessage');
+        timeMessage = localStorage.getItem('timeMessage');
 
-    if (resultMessage || timeMessage) {
-        const lastTime = parseInt(timeMessage);
-        const elapsedTime = Date.now() - lastTime;
+        if (resultMessage || timeMessage) {
+            const lastTime = parseInt(timeMessage);
+            const elapsedTime = Date.now() - lastTime;
 
-        const timeoutResult = 15 * 60 * 1000; // milliseconds
-        const timeoutMessage =  3 * 60 * 60 * 1000
+            const timeoutResult = 15 * 60 * 1000; // milliseconds
+            const timeoutMessage =  3 * 60 * 60 * 1000
 
-        // If the user played more than 4 hours ago, reset the message
-        if (elapsedTime >= timeoutMessage) {
-            localStorage.removeItem('resultMessage');
-            localStorage.removeItem('timeMessage');
-            resultMessage = false;
-            timeMessage = false;
-            
-        // If the user played more than 15 minutes, change the message
-        } else if (elapsedTime >= timeoutResult) {
-            resultMessage = 'Hai già partecipato all\'estrazione.';
-            localStorage.setItem('resultMessage', resultMessage);
+            // If the user played more than 4 hours ago, reset the message
+            if (elapsedTime >= timeoutMessage) {
+                localStorage.removeItem('resultMessage');
+                localStorage.removeItem('timeMessage');
+                resultMessage = false;
+                timeMessage = false;
+                
+            // If the user played more than 15 minutes, change the message
+            } else if (elapsedTime >= timeoutResult) {
+                resultMessage = 'Hai già partecipato all\'estrazione.';
+                localStorage.setItem('resultMessage', resultMessage);
+            }
         }
-    }
 
-    //}
+    } catch (error){
+        console.error('Errore durante il recupero dei dati da localStorage:', error);
+        resultMessage = false;
+    }
 
     // If the user has already played in this session,
     if (resultMessage) {
@@ -63,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Prevent user from going back
     window.onpopstate = function() {
-        history.go(1);
+        history.go(0);
     };
 });
 
@@ -72,6 +76,12 @@ document.getElementById('prizeButton').addEventListener('click', () => {
     document.getElementById('prizeButton').style.opacity = 0.3;
     document.getElementById('playMsg').style.display = 'none';
     document.getElementById('waitMsg').style.display = 'block';
+
+    // Prevent user from going back
+    window.onpopstate = function() {
+        history.go(0);
+    };
+
     fetch('/.netlify/functions/prizeHandler')
         .then(response => {
             if (!response.ok) {
@@ -82,11 +92,13 @@ document.getElementById('prizeButton').addEventListener('click', () => {
     })
     .then(data => {
         let message = data.message;
-        if (checkLocalStorage){
+        try {
             // Store the result message in localStorage
             localStorage.setItem('resultMessage', message);
             localStorage.setItem('timeMessage', Date.now());
-        }   
+        } catch (error) {
+            console.error('Errore durante il salvataggio dei dati su localStorage:', error);
+        }
 
         // Hide the button and display the result message
         document.getElementById('wheel').style.display = 'none';
@@ -100,10 +112,6 @@ document.getElementById('prizeButton').addEventListener('click', () => {
         document.getElementById('result').innerText = 'Si è verificato un errore. Riprova più tardi.';
     });
 
-    // Prevent user from going back
-    window.onpopstate = function() {
-        history.go(1);
-    };
 });
 
 
