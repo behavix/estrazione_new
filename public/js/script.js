@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById("result").innerText = 'Devi compilare il questionario per partecipare all\'estrazione!';
     }
 
-    // Keep the page unchanged in case of reload
+    // Keep the url unchanged
     history.replaceState({}, document.title, window.location.pathname);
 });
 
@@ -91,8 +91,9 @@ document.getElementById('prizeButton').addEventListener('click', () => {
         document.getElementById("result").style.display = 'block';
         document.getElementById("result").innerText = message;
 
-        // Prevent the page from reloading
-        history.pushState({}, document.title, window.location.origin);
+        // Keep the url unchanged
+        history.replaceState({}, document.title, window.location.pathname);
+
     })
     .catch(error => {
         console.error('Errore:', error);
