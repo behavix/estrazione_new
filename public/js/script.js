@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Keep the url unchanged
-    history.replaceState({}, document.title, window.location.pathname);
+    history.pushState({}, document.title, window.location.origin);
 });
 
 // Call the function to participate in the draw
@@ -92,7 +92,7 @@ document.getElementById('prizeButton').addEventListener('click', () => {
         document.getElementById("result").innerText = message;
 
         // Keep the url unchanged
-        history.replaceState({}, document.title, window.location.pathname);
+        history.pushState({}, document.title, window.location.origin);
 
     })
     .catch(error => {
