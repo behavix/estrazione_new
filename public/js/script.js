@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+
     const referrer = document.referrer;
     const urlParams = new URLSearchParams(window.location.search);
     const validParam = urlParams.get('valid');  
  
     let resultMessage = false;
     let timeMessage = false;
-    /*
+/*
     if (!checkLocalStorage()){
         document.getElementById('playMsg').innerText = 'Il tuo browser non è '
         + 'abilitato al salvataggio dei dati o ti trovi su una scheda in incognito.'
@@ -22,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const lastTime = parseInt(timeMessage);
         const elapsedTime = Date.now() - lastTime;
 
-        const timeoutResult = 1 * 60 * 1000; // milliseconds
-        const timeoutMessage =  2 * 60 * 1000
+        const timeoutResult = 15 * 60 * 1000; // milliseconds
+        const timeoutMessage =  3 * 60 * 60 * 1000
 
         // If the user played more than 4 hours ago, reset the message
         if (elapsedTime >= timeoutMessage) {
@@ -60,8 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById("result").innerText = 'Devi compilare il questionario per partecipare all\'estrazione!';
     }
 
-    // Keep the url unchanged
-    history.pushState({}, document.title, window.location.origin);
+    // Prevent user from going back
+    window.onpopstate = function() {
+        history.go(1);
+    };
 });
 
 // Call the function to participate in the draw
@@ -72,7 +75,7 @@ document.getElementById('prizeButton').addEventListener('click', () => {
     fetch('/.netlify/functions/prizeHandler')
         .then(response => {
             if (!response.ok) {
-                document.getElementById("result").innerText = 'Si è verificato un errore. Riprova più tardi.';
+                document.getElementById('result').innerText = 'Si è verificato un errore. Riprova più tardi.';
                 throw new Error('Il network non risponde, riprova.', response.statusText);
             }
             return response.json();
@@ -88,17 +91,19 @@ document.getElementById('prizeButton').addEventListener('click', () => {
         // Hide the button and display the result message
         document.getElementById('wheel').style.display = 'none';
         document.getElementById('wheel').style.height = 0;
-        document.getElementById("result").style.display = 'block';
-        document.getElementById("result").innerText = message;
-
-        // Keep the url unchanged
-        history.pushState({}, document.title, window.location.origin);
-
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('result').innerText = message;
     })
+    
     .catch(error => {
         console.error('Errore:', error);
-        document.getElementById("result").innerText = 'Si è verificato un errore. Riprova più tardi.';
+        document.getElementById('result').innerText = 'Si è verificato un errore. Riprova più tardi.';
     });
+
+    // Prevent user from going back
+    window.onpopstate = function() {
+        history.go(1);
+    };
 });
 
 
