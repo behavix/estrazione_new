@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             // if not, allow to play
             if (data.isValid) {
+                removeValidParam()
                 removeToken();
                 document.getElementById('wheel').style.display = 'block';
             } else {
@@ -140,6 +141,15 @@ function checkLocalStorage() {
     } catch (e) {
         return false;
     }
+}
+
+function removeValidParam() {
+    const url = new URL(window.location.href);
+    // Remove parameter 'valid'
+    url.searchParams.delete('valid');
+    
+    // Replace url on history
+    window.history.replaceState({}, document.title, url.toString());
 }
 
 function removeToken() {
