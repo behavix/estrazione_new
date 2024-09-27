@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-
-    const referrer = document.referrer;
-    const urlParams = new URLSearchParams(window.location.search);
-    const validParam = urlParams.get('valid');  
  
+    const timeoutResult = 15 * 60 * 1000; // milliseconds
+    const timeoutMessage =  3 * 60 * 60 * 1000
     let resultMessage = false;
     let timeMessage = false;
 
@@ -23,9 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (resultMessage || timeMessage) {
             const lastTime = parseInt(timeMessage);
             const elapsedTime = Date.now() - lastTime;
-
-            const timeoutResult = 15 * 60 * 1000; // milliseconds
-            const timeoutMessage =  3 * 60 * 60 * 1000
 
             // If the user played more than 4 hours ago, reset the message
             if (elapsedTime >= timeoutMessage) {
@@ -54,21 +49,38 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById("result").style.display = 'block';
         document.getElementById("result").innerText = resultMessage;
 
-    // If the user visits the draw page directly,
-    } else if (!referrer || !validParam || validParam !== 'true') {
-        // then notify that they need to complete the questionnaire
-        document.getElementById('thanks').style.display = 'none';
-        document.getElementById('thanks').style.height = 0;
-        document.getElementById('wheel').style.display = 'none';
-        document.getElementById('wheel').style.height = 0;
-        document.getElementById("result").style.display = 'block';
-        document.getElementById("result").innerText = 'Devi compilare il questionario per partecipare all\'estrazione!';
+    } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        // Check if the user visits the draw page directly
+        fetch(`/.netlify/functions/validateToken?token=${token}`)
+        .then(response => response.json())
+        .then(data => {
+            // if not, allow to play
+            if (data.isValid) {
+                removeToken();
+                document.getElementById('wheel').style.display = 'block';
+            } else {
+                // else notify that they need to complete the questionnaire
+                document.getElementById('thanks').style.display = 'none';
+                document.getElementById('thanks').style.height = 0;
+                document.getElementById("result").style.display = 'block';
+                document.getElementById("result").innerText = 'Devi compilare il questionario per partecipare all\'estrazione!';
+            }
+        })
+        .catch(error => {
+            console.error('Errore durante la verifica del token:', error);
+            document.getElementById("result").innerText = 'Devi compilare il questionario per partecipare all\'estrazione!';
+        });
     }
 
     // Prevent user from going back
-    window.onpopstate = function() {
-        history.go(0);
+    history.pushState(null, null, window.location.href);
+        window.onpopstate = function() {
+        history.pushState(null, null, window.location.href);
     };
+
 });
 
 // Call the function to participate in the draw
@@ -78,8 +90,9 @@ document.getElementById('prizeButton').addEventListener('click', () => {
     document.getElementById('waitMsg').style.display = 'block';
 
     // Prevent user from going back
+    history.pushState(null, null, window.location.href);
     window.onpopstate = function() {
-        history.go(0);
+        history.pushState(null, null, window.location.href);
     };
 
     fetch('/.netlify/functions/prizeHandler')
@@ -89,28 +102,28 @@ document.getElementById('prizeButton').addEventListener('click', () => {
                 throw new Error('Il network non risponde, riprova.', response.statusText);
             }
             return response.json();
-    })
-    .then(data => {
-        let message = data.message;
-        try {
-            // Store the result message in localStorage
-            localStorage.setItem('resultMessage', message);
-            localStorage.setItem('timeMessage', Date.now());
-        } catch (error) {
-            console.error('Errore durante il salvataggio dei dati su localStorage:', error);
-        }
+        })
+        .then(data => {
+            let message = data.message;
+            try {
+                // Store the result message in localStorage
+                localStorage.setItem('resultMessage', message);
+                localStorage.setItem('timeMessage', Date.now());
+            } catch (error) {
+                console.error('Errore durante il salvataggio dei dati su localStorage:', error);
+            }
 
-        // Hide the button and display the result message
-        document.getElementById('wheel').style.display = 'none';
-        document.getElementById('wheel').style.height = 0;
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('result').innerText = message;
-    })
+            // Hide the button and display the result message
+            document.getElementById('wheel').style.display = 'none';
+            document.getElementById('wheel').style.height = 0;
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').innerText = message;
+        })
     
-    .catch(error => {
-        console.error('Errore:', error);
-        document.getElementById('result').innerText = 'Si è verificato un errore. Riprova più tardi.';
-    });
+        .catch(error => {
+            console.error('Errore:', error);
+            document.getElementById('result').innerText = 'Si è verificato un errore. Riprova più tardi.';
+        });
 
 });
 
@@ -127,4 +140,13 @@ function checkLocalStorage() {
     } catch (e) {
         return false;
     }
+}
+
+function removeToken() {
+    const url = new URL(window.location.href);
+    // Remove token
+    url.searchParams.delete('token');
+    
+    // Replace url on history
+    window.history.replaceState({}, document.title, url.toString());
 }

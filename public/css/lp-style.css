@@ -56,14 +56,12 @@ button {
     color: white;
     background-color: var(--orange);
 }
-#result {
-    display: none;
-}
 #wheel, #result {
     box-sizing: border-box;
     position: absolute;
     top: 40%;
     width: 90%;
+    display: none;
 }
 #waitMsg {
     display: none;

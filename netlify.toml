@@ -1,8 +1,7 @@
 [build]
   publish = "public"
   functions = "netlify/functions"
-  
 
 [functions]
-  included_files = ["netlify/functions/config/config.json"]
+  included_files = ["netlify/functions/config/config.json", "netlify/functions/**"]
   
