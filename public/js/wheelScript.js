@@ -150,6 +150,8 @@ function removeValidParam() {
     
     // Replace url on history
     window.history.replaceState({}, document.title, url.toString());
+
+    window.location.reload();
 }
 
 function removeToken() {
