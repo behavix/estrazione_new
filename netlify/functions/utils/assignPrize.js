@@ -1,6 +1,6 @@
 // Import the logError function
 const logError = require('./logError');
-
+const config = require('./../config/config.json');
 
 // Helper function to process prize drawing
 async function assignPrize(airtableBase, config, currentRecord) {
@@ -27,7 +27,7 @@ async function assignPrize(airtableBase, config, currentRecord) {
             const prizeNumber = totalPrizes - prizesLeft;
 
             // Calculates expiration
-            now.setMinutes(now.getMinutes() + 30);
+            now.setMinutes(now.getMinutes() + config.expirationMinutes);
             const expiration = now.toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' });
 
             return {
