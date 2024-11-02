@@ -44,7 +44,7 @@ main {
     width: 90%;
     margin: 5% auto;
     padding: 5%;
-    font-size: 3.4rem;
+    font-size: 1.7rem;
     flex-direction: column; /* Disposizione verticale */
     gap: 20px; /* Spazio tra gli elementi */
 }
@@ -60,7 +60,6 @@ button {
 }
 #wheel, #result {
     box-sizing: border-box;
-    position: absolute;
     top: 40%;
     width: 90%;
     display: none;
