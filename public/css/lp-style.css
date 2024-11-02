@@ -44,7 +44,9 @@ main {
     width: 90%;
     margin: 5% auto;
     padding: 5%;
-    font-size: 1.7rem;
+    font-size: 3.4rem;
+    flex-direction: column; /* Disposizione verticale */
+    gap: 20px; /* Spazio tra gli elementi */
 }
 button {
     width: fit-content;
@@ -75,9 +77,4 @@ footer {
     font-size: 1rem;
     color: white;
     background-color: var(--green);
-}
-main {
-    display: flex;
-    flex-direction: column; /* Disposizione verticale */
-    gap: 20px; /* Spazio tra gli elementi */
 }
