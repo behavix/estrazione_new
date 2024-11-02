@@ -27,7 +27,7 @@ async function assignPrize(airtableBase, config, currentRecord) {
             const prizeNumber = totalPrizes - prizesLeft;
 
             // Calculates expiration
-            now.setMinutes(now.getMinutes() + 15);
+            now.setMinutes(now.getMinutes() + 30);
             const expiration = now.toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' });
 
             return {
