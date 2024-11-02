@@ -34,7 +34,7 @@ async function assignPrize(airtableBase, config, currentRecord) {
                 statusCode: 200,
                 winning: true,
                 message: 'Complimenti!\n\nHai vinto il caffè n.' + prizeNumber + ' del ' + today
-                        + '.\n\nRitiralo entro le ore ' + expiration + '.',
+                        + '.\n\nRitiralo alla cassa del BAR entro le ore ' + expiration + '.',
             };
         } else {
             return {
