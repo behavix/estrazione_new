@@ -38,9 +38,5 @@ function removeValidParam() {
     url.searchParams.delete('valid');
     
     // Replace url on history
-    setTimeout(() => {
-        window.history.replaceState({}, document.title, url.toString());
-    }, 100);
-
-    window.location.reload();
+    window.history.replaceState({}, document.title, url.toString());
 }
