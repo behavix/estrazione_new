@@ -12,20 +12,22 @@ const unlockTable = require('./utils/unlockTable');
 module.exports.handler = async function() {
 
     try {   
+        console.log("chiamato prizeHandler");
         // Read config file
         const config = await readConfig('../config/config.json');
-
+         console.log("letto config");
         // Airtable connection
         const airtableBase = await connAirtable(config.airtableBase);
-
+         console.log("letto airtable");
         // Find the check record lo lock the main table
         const checkRecord = await checkLockRecord(airtableBase, config);
-
         // Process prize drawing
         const prize = await extractor(config);
+         console.log("estratto premio: ", prize);
         const nonWinningMessage = 'Questa volta non hai vinto.\n\nRiprova domani!';
         let message = nonWinningMessage;
-
+         console.log("messaggio: ", message);
+        
         // If won, login to the database
         if (prize) {
             try {
