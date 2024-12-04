@@ -34,7 +34,7 @@ async function assignPrize(airtableBase, config, currentRecord) {
                 statusCode: 200,
                 winning: true,
                 message: 'Complimenti!\n\nHai vinto il caffè n.' + prizeNumber + ' del ' + today
-                        + '.\n\nRitira il GETTONE all'ISOLA DEI DESSERT entro le ore ' + expiration + '.',
+                        + '.\n\nRitira il GETTONE all\'ISOLA DEI DESSERT entro le ore ' + expiration + '.',
             };
         } else {
             return {
